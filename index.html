@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ITRs QAQC</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">Lista de ITRs QAQC</h2>
+  <table id="itrsTable" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Sistema</th>
+        <th>Subsistema</th>
+        <th>Tag</th>
+        <th>ITR</th>
+        <th>Especialidad</th>
+        <th>Categoría</th>
+        <th>Avance</th>
+        <th>Resultado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $.getJSON("itrs_data.json", function(data) {
+      var table = $('#itrsTable').DataTable();
+      data.forEach(function(item) {
+        let accion = item.Resultado === "Terminado"
+          ? '<span class="badge bg-success">ITR Terminado</span>'
+          : '<button class="btn btn-warning btn-sm">Completar ITR</button>';
+        table.row.add([
+          item.Sistema || '',
+          item.Subsistema || '',
+          item.Tag || '',
+          item.ITR || '',
+          item.Especialidad || '',
+          item.Categoria || '',
+          item.Avance != null ? item.Avance + '%' : '',
+          item.Resultado || '',
+          accion
+        ]).draw(false);
+      });
+    });
+  });
+</script>
+</body>
+</html>
